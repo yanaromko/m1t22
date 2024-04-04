@@ -17,20 +17,19 @@ public class Util {
     private static final String URL = "jdbc:mysql://localhost:3306/modulfirsttasksecond";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "root";
+    private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
     private static SessionFactory sessionFactory;
     private static Connection connection;
     private static Util instance;
 
     public static SessionFactory getConnection() throws HibernateException {
         Configuration configuration = new Configuration()
+                .setProperty("hibernate.connection.driver_class", DRIVER)
                 .setProperty("hibernate.connection.url", URL)
                 .setProperty("hibernate.connection.username", USERNAME)
                 .setProperty("hibernate.connection.password", PASSWORD)
                 .setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect")
-                .addAnnotatedClass(User.class)
-                .setProperty("hibernate.c3p0.min_size","5")
-                .setProperty("hibernate.c3p0.max_size","200")
-                .setProperty("hibernate.c3p0.max_statements","200");
+                .addAnnotatedClass(User.class);
         ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties()).build();
         sessionFactory = configuration.buildSessionFactory(serviceRegistry);
