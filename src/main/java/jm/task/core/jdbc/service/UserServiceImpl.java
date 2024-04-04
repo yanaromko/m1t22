@@ -23,19 +23,19 @@ public class UserServiceImpl implements UserService {
         userdao.dropUsersTable();
     }
     @Override
-    public void saveUser(String name, String lastName, byte age) throws SQLException {
+    public void saveUser(String name, String lastName, byte age) throws SQLException{
         userdao.saveUser(name, lastName, age);
     }
     @Override
-    public void removeUserById(long id) throws SQLException {
+    public void removeUserById(long id) throws SQLException{
         userdao.removeUserById(id);
     }
     @Override
-    public List<User> getAllUsers() throws SQLException {
+    public List<User> getAllUsers() throws SQLException{
         return userdao.getAllUsers();
     }
     @Override
-    public void cleanUsersTable() throws SQLException {
+    public void cleanUsersTable() throws SQLException{
         userdao.cleanUsersTable();
     }
 }

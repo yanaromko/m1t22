@@ -1,5 +1,6 @@
 package jm.task.core.jdbc.dao;
 
+import jm.task.core.jdbc.exception.DaoException;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 import org.hibernate.HibernateException;
@@ -12,7 +13,14 @@ import java.sql.Connection;
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
-    private final SessionFactory sessionFactory = Util.getConnection();
+    private static SessionFactory sessionFactory;
+    static {
+        try {
+            sessionFactory = Util.getConnection();
+        }catch (Exception exception) {
+            throw new DaoException(exception);
+        }
+    }
     public UserDaoHibernateImpl() {
 
     }
@@ -23,11 +31,15 @@ public class UserDaoHibernateImpl implements UserDao {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         try {
-            session.createNativeQuery("CREATE TABLE IF NOT EXISTS USERS" +
-                    " (id mediumint not null auto_increment, name VARCHAR(48), " +
-                    "lastname VARCHAR(45), " +
-                    "age tinyint, " +
-                    "PRIMARY KEY (id))").executeUpdate();
+            session.createNativeQuery("""
+                CREATE TABLE IF NOT EXISTS users
+                (
+                    id        INT PRIMARY KEY AUTO_INCREMENT,
+                    name      VARCHAR(45) NOT NULL,
+                    last_name VARCHAR(45) NOT NULL,
+                    age       TINYINT     NOT NULL
+                )
+                """).executeUpdate();
             transaction.commit();
         } catch (HibernateException e) {
             e.printStackTrace();
@@ -44,7 +56,7 @@ public class UserDaoHibernateImpl implements UserDao {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         try {
-            session.createNativeQuery("DROP TABLE IF IT EXISTS USERS").executeUpdate();
+            session.createNativeQuery("DROP TABLE IF EXISTS USERS").executeUpdate();
             transaction.commit();
         } catch (HibernateException e) {
             e.printStackTrace();

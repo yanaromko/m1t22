@@ -17,29 +17,24 @@ public class Util {
     private static final String URL = "jdbc:mysql://localhost:3306/modulfirsttasksecond";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "root";
-    private static SessionFactory sessionFactory = null;
+    private static SessionFactory sessionFactory;
     private static Connection connection;
-    private static Util instatce;
+    private static Util instance;
 
-    public static SessionFactory getConnection() {
-        try {
-            Configuration configuration = new Configuration()
-                    .setProperty("hibernate.connection.url", URL)
-                    .setProperty("hibernate.connection.username", USERNAME)
-                    .setProperty("hibernate.connection.password", PASSWORD)
-                    .setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect")
-                    .addAnnotatedClass(User.class)
-                    .setProperty("hibernate.c3p0.min_size","5")
-                    .setProperty("hibernate.c3p0.max_size","200")
-                    .setProperty("hibernate.c3p0.max_statements","200");
-            ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-                    .applySettings(configuration.getProperties()).build();
-            sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-        } catch (HibernateException e) {
-            e.printStackTrace();
-        }
+    public static SessionFactory getConnection() throws HibernateException {
+        Configuration configuration = new Configuration()
+                .setProperty("hibernate.connection.url", URL)
+                .setProperty("hibernate.connection.username", USERNAME)
+                .setProperty("hibernate.connection.password", PASSWORD)
+                .setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect")
+                .addAnnotatedClass(User.class)
+                .setProperty("hibernate.c3p0.min_size","5")
+                .setProperty("hibernate.c3p0.max_size","200")
+                .setProperty("hibernate.c3p0.max_statements","200");
+        ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+                .applySettings(configuration.getProperties()).build();
+        sessionFactory = configuration.buildSessionFactory(serviceRegistry);
         return sessionFactory;
-
     }
     private Util() {
         try {
@@ -48,11 +43,11 @@ public class Util {
             e.printStackTrace();
         }
     }
-    public static Util gitInstatce() {
-        if (instatce == null) {
-            instatce = new Util();
+    public static Util gitInstance() {
+        if (instance == null) {
+            instance = new Util();
         }
-        return instatce;
+        return instance;
     }
 
     public static Connection getConnection1() {
